@@ -2,12 +2,30 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+// import assets
+import playImg from "./assets/play.png";
+import resetImg from "./assets/reset.png";
+import studyBtnClicked from "./assets/study-clicked.png";
+import studyBtn from "./assets/study.png";
+import breakBtnClicked from "./assets/break-clicked.png";
+import breakBtn from "./assets/break.png";
+import idleGif from "./assets/idle.gif";
+import studyGif from "./assets/study.gif";
+import breakGif from "./assets/break.gif";
+import meowSound from "./assets/meow.mp3";
+import closeBtn from "./assets/close.png";
+
 function App() {
   // timer functionality
   const [timeLeft, setTimeLeft] = useState(25*60);
   const [isRunning, setIsRunning] = useState(false);
+  const [breakButtonImage, setBreakButtonImage] = useState(breakBtn);
+  const [studyButtonImage, setStudyButtonImage] = useState(studyBtn);
+  const [gifImage, setGifImage] = useState(idleGif);
   const [isBreak, setIsBreak] = useState(false);
   const [encouragement, setEncouragement] = useState(""); // want it to be empty initallly
+  const [image, setImage] = useState(playImg);
+  const meowAudio = new Audio(meowSound);
 
   const cheerMessages = [
     "You Can Do It!",
@@ -58,6 +76,25 @@ function App() {
     return() => clearInterval(timer);
   }, [isRunning, timeLeft]);
 
+  // set initial switch mode to false
+  useEffect(() => {
+    switchMode(false);
+  }, []);
+
+  // meow sound played when timer is up 
+  useEffect(() => {
+    if (timeLeft == 0 && isRunning) {
+      meowAudio.play().catch(err => {
+        console.error("Audio play failed:", err);
+      });
+
+      setIsRunning(false);
+      setImage(playImg);
+      setGifImage(idleGif);
+      setTimeLeft(isBreak ? 5 * 60 : 25 * 60);
+    }
+  }, [timeLeft]);
+
   //format the time
   const formatTime = (seconds: number): string => {
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -69,49 +106,59 @@ function App() {
   const switchMode = (breakMode: boolean) => {
     setIsBreak(breakMode);
     setIsRunning(false);
+    setBreakButtonImage(breakMode ? breakBtnClicked : breakBtn);
+    setStudyButtonImage(breakMode ? studyBtn : studyBtnClicked);
     setTimeLeft(breakMode ? 5 * 60: 25 * 60);
+    setGifImage(idleGif);
   }
 
   const handleClick = () => {
     if (!isRunning) {
       setIsRunning(true);
+      setGifImage(isBreak ? breakGif : studyGif);
+      setImage(resetImg);
     } else {
       //  timer is running
       setIsRunning(false);
       setTimeLeft(isBreak ? 5 * 60: 25 * 60);
+      setGifImage(idleGif);
+      setImage(playImg);
     }
   }
 
+  const containerClass = `home-container ${isRunning ? "background-green" : ""}`;
+
   return (
-    <div style = {{position: 'relative'}}>
-
-    <div>
-      <button className="closeButton">
-        Close
+  
+    <div className={containerClass} style={{ position: "relative" }}>
+      <button className="close-button">
+        <img src={closeBtn} alt="Close" />
       </button>
-    </div>
 
-    <div className="home-content">
-      <div className="home-controls">
-        <button className="image-button" onClick={ () => switchMode(false)}>
-          Thrive
+      <div className="home-content">
+        <div className="home-controls">
+          <button className="image-button" onClick={() => switchMode(false)}>
+            <img src={studyButtonImage} alt="Study" />
+          </button>
+
+          <button className="image-button" onClick={() => switchMode(true)}>
+            <img src={breakButtonImage} alt="Break" />
+          </button>
+        </div>
+
+        <p className={`encouragement-text ${!isRunning ? "hidden" : ""}`}>
+          {encouragement}
+        </p>
+
+        <h1 className="home-timer">{formatTime(timeLeft)}</h1>
+
+        <img src={gifImage} alt="Timer Status" className="gif-image" />
+
+        <button className="home-button play-button" onClick={handleClick}>
+          <img src={image} alt="Button Icon" />
         </button>
-        <button className="image-button" onClick={ () => switchMode(true)}>
-          Break  
-        </button>
+
       </div>
-
-      {/* motivational speech here */}
-      <p className={`encouragement-text ${!isRunning ? "hidden" : ""}`}>
-        { encouragement}
-      </p>
-
-      <h1 className="home-timer">{formatTime(timeLeft)}</h1>
-
-      <button className="home-button" onClick={handleClick}>
-        Start
-      </button>
-    </div>
     </div>
   );
 }
