@@ -38,7 +38,11 @@ function createMainWindow() {
     // listen for 'close-app' event 
     ipcMain.on('close-app', () => {
         app.quit();
-    })
+    });
+
+    ipcMain.on('minimise-window', () => {
+        BrowserWindow.getFocusedWindow()?.minimize();
+    });
 }
 
 app.whenReady().then(createMainWindow);

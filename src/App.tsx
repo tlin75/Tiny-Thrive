@@ -4,8 +4,6 @@ import './App.css';
 // import assets
 import meowSound from "./assets/meow.mp3";
 
-
-
 function App() {
 
   // set up background themes as an array 
@@ -21,8 +19,8 @@ function App() {
       breakClicked: require("./assets/break-clicked-blue.png"),
       play: require("./assets/play-blue.png"),
       reset: require("./assets/reset-blue.png"),
-      close: require("./assets/close-blue.png")
-
+      close: require("./assets/close-blue.png"),
+      minimise: require("./assets/minimise-blue.png")
     },
     {
       name: "green",
@@ -35,7 +33,8 @@ function App() {
       breakClicked: require("./assets/break-clicked-green.png"),
       play: require("./assets/play-green.png"),
       reset: require("./assets/reset-green.png"),
-      close: require("./assets/close-green.png")
+      close: require("./assets/close-green.png"),
+      minimise: require("./assets/minimise-green.png")
 
     },
     {
@@ -49,7 +48,8 @@ function App() {
       breakClicked: require("./assets/break-clicked-mauve.png"),
       play: require("./assets/play-mauve.png"),
       reset: require("./assets/reset-mauve.png"),
-      close: require("./assets/close-mauve.png")
+      close: require("./assets/close-mauve.png"),
+      minimise: require("./assets/minimise-mauve.png")
 
     },
     {
@@ -63,7 +63,8 @@ function App() {
       breakClicked: require("./assets/break-clicked-purple.png"),
       play: require("./assets/play-purple.png"),
       reset: require("./assets/reset-purple.png"),
-      close: require("./assets/close-purple.png")
+      close: require("./assets/close-purple.png"),
+      minimise: require("./assets/minimise-purple.png")
 
     },
     {
@@ -77,7 +78,8 @@ function App() {
       breakClicked: require("./assets/break-clicked-turquoise.png"),
       play: require("./assets/play-turquoise.png"),
       reset: require("./assets/reset-turquoise.png"),
-      close: require("./assets/close-turquoise.png")
+      close: require("./assets/close-turquoise.png"),
+      minimise: require("./assets/minimise-turquoise.png")
 
     },
   ]
@@ -207,6 +209,14 @@ function App() {
     }
   }
 
+  const handleMinimiseClick = () => {
+    if (window.electronAPI?.minimise) {
+      window.electronAPI?.minimise();
+    } else {
+      console.warn("Electron API not available");
+    }
+  }
+
   return (
   
     <div
@@ -217,6 +227,10 @@ function App() {
     >
       <button className="close-button">
         <img src={activeTheme.close} onClick={ handleCloseClick } />
+      </button>
+
+      <button className="min-button">
+        <img src={activeTheme.minimise} onClick={ handleMinimiseClick } />
       </button>
 
       <h1 className="timer-asset">{formatTime(timeLeft)}</h1>

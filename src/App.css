@@ -61,6 +61,20 @@
   height: 21px;
 }
 
+.min-button {
+  position: absolute;
+  top: 16px;
+  right: 38px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.min-button img {
+  width: 21px;
+  height: 21px;
+}
+
 .image-button, .home-button, .play-button {
   background: transparent;
   border: none;
