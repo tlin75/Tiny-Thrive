@@ -9,20 +9,6 @@ function App() {
   // set up background themes as an array 
   const themes = [
     {
-      name: "blue",
-      background: require("./assets/background-blue.png"),
-      timerColour: '#FFFFFF',
-      encouragementColour: '#A3E8FD',
-      study: require("./assets/study-blue.png"),
-      studyClicked: require("./assets/study-clicked-blue.png"),
-      break: require("./assets/break-blue.png"),
-      breakClicked: require("./assets/break-clicked-blue.png"),
-      play: require("./assets/play-blue.png"),
-      reset: require("./assets/reset-blue.png"),
-      close: require("./assets/close-blue.png"),
-      minimise: require("./assets/minimise-blue.png")
-    },
-    {
       name: "green",
       background: require("./assets/background-green.png"),
       timerColour: '#7BBBA0',
@@ -36,6 +22,20 @@ function App() {
       close: require("./assets/close-green.png"),
       minimise: require("./assets/minimise-green.png")
 
+    },
+    {
+      name: "blue",
+      background: require("./assets/background-blue.png"),
+      timerColour: '#FFFFFF',
+      encouragementColour: '#A3E8FD',
+      study: require("./assets/study-blue.png"),
+      studyClicked: require("./assets/study-clicked-blue.png"),
+      break: require("./assets/break-blue.png"),
+      breakClicked: require("./assets/break-clicked-blue.png"),
+      play: require("./assets/play-blue.png"),
+      reset: require("./assets/reset-blue.png"),
+      close: require("./assets/close-blue.png"),
+      minimise: require("./assets/minimise-blue.png")
     },
     {
       name: "mauve",
@@ -166,7 +166,7 @@ function App() {
 
   // meow sound played when timer is up 
   useEffect(() => {
-    if (timeLeft == 0 && isRunning) {
+    if (timeLeft === 0 && isRunning) {
       meowAudio.play().catch(err => {
         console.error("Audio play failed:", err);
       });
