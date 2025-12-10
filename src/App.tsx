@@ -1,31 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect, act } from 'react';
 import './App.css';
 
 // import assets
-import playImg from "./assets/play.png";
-import resetImg from "./assets/reset.png";
-import studyBtnClicked from "./assets/study-clicked.png";
-import studyBtn from "./assets/study.png";
-import breakBtnClicked from "./assets/break-clicked.png";
-import breakBtn from "./assets/break.png";
-import idleGif from "./assets/idle.gif";
-import studyGif from "./assets/study.gif";
-import breakGif from "./assets/break.gif";
 import meowSound from "./assets/meow.mp3";
-import closeBtn from "./assets/close.png";
+
+
 
 function App() {
+
+  // set up background themes as an array 
+  const themes = [
+    {
+      name: "blue",
+      background: require("./assets/background-blue.png"),
+      timerColour: '#FFFFFF',
+      encouragementColour: '#A3E8FD',
+      study: require("./assets/study-blue.png"),
+      studyClicked: require("./assets/study-clicked-blue.png"),
+      break: require("./assets/break-blue.png"),
+      breakClicked: require("./assets/break-clicked-blue.png"),
+      play: require("./assets/play-blue.png"),
+      reset: require("./assets/reset-blue.png"),
+      close: require("./assets/close-blue.png")
+
+    },
+    {
+      name: "green",
+      background: require("./assets/background-green.png"),
+      timerColour: '#7BBBA0',
+      encouragementColour: '#30897C',
+      study: require("./assets/study-green.png"),
+      studyClicked: require("./assets/study-clicked-green.png"),
+      break: require("./assets/break-green.png"),
+      breakClicked: require("./assets/break-clicked-green.png"),
+      play: require("./assets/play-green.png"),
+      reset: require("./assets/reset-green.png"),
+      close: require("./assets/close-green.png")
+
+    },
+    {
+      name: "mauve",
+      background: require("./assets/background-mauve.png"),
+      timerColour: '#DF8DA4',
+      encouragementColour: '#C17C9E',
+      study: require("./assets/study-mauve.png"),
+      studyClicked: require("./assets/study-clicked-mauve.png"),
+      break: require("./assets/break-mauve.png"),
+      breakClicked: require("./assets/break-clicked-mauve.png"),
+      play: require("./assets/play-mauve.png"),
+      reset: require("./assets/reset-mauve.png"),
+      close: require("./assets/close-mauve.png")
+
+    },
+    {
+      name: "purple",
+      background: require("./assets/background-purple.png"),
+      timerColour: '#90519A',
+      encouragementColour: '#FFFFFF',
+      study: require("./assets/study-purple.png"),
+      studyClicked: require("./assets/study-clicked-purple.png"),
+      break: require("./assets/break-purple.png"),
+      breakClicked: require("./assets/break-clicked-purple.png"),
+      play: require("./assets/play-purple.png"),
+      reset: require("./assets/reset-purple.png"),
+      close: require("./assets/close-purple.png")
+
+    },
+    {
+      name: "turquoise",
+      background: require("./assets/background-turquoise.png"),
+      timerColour: '#2999BC',
+      encouragementColour: '#3EBDC8',
+      study: require("./assets/study-turquoise.png"),
+      studyClicked: require("./assets/study-clicked-turquoise.png"),
+      break: require("./assets/break-turquoise.png"),
+      breakClicked: require("./assets/break-clicked-turquoise.png"),
+      play: require("./assets/play-turquoise.png"),
+      reset: require("./assets/reset-turquoise.png"),
+      close: require("./assets/close-turquoise.png")
+
+    },
+  ]
+
   // timer functionality
-  const [timeLeft, setTimeLeft] = useState(25*60);
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
-  const [breakButtonImage, setBreakButtonImage] = useState(breakBtn);
-  const [studyButtonImage, setStudyButtonImage] = useState(studyBtn);
-  const [gifImage, setGifImage] = useState(idleGif);
   const [isBreak, setIsBreak] = useState(false);
-  const [encouragement, setEncouragement] = useState(""); // want it to be empty initallly
-  const [image, setImage] = useState(playImg);
+  // want it make encouragement message to be empty initallly
+  const [encouragement, setEncouragement] = useState(""); 
   const meowAudio = new Audio(meowSound);
+  const [themeIndex, setThemeIndex] = useState(0);
+  const activeTheme = themes[themeIndex];
 
   const cheerMessages = [
     "You Can Do It!",
@@ -33,7 +98,10 @@ function App() {
     "You Got This!", 
     "Stay Locked In!",
     "Keep Up The Grind!",
-    "Stay Focused Academic Weapon"
+    "Stay Focused",
+    "Never Back Down!",
+    "Never Give Up!",
+    "Academic Weapon!"
   ];
 
   const breakMessages = [
@@ -70,7 +138,20 @@ function App() {
     let timer: NodeJS.Timeout;
     if (isRunning && timeLeft > 0) {
       timer = setInterval( () => {
-        setTimeLeft(prev => prev - 1);
+        setTimeLeft(prev => {
+          const newTime = prev - 1;
+          
+          // Change the background theme every 5 mins during study mode
+          if (!isBreak) {
+            const totalElapsed = (25 * 60) - newTime;
+
+            if (totalElapsed % 300 === 0) {
+              setThemeIndex(prevIndex => (prevIndex + 1) % themes.length);
+            } 
+          }
+          return newTime;
+        }); 
+        
       }, 1000); // 1000 millisecs = 1 sec
     }
     return() => clearInterval(timer);
@@ -89,8 +170,6 @@ function App() {
       });
 
       setIsRunning(false);
-      setImage(playImg);
-      setGifImage(idleGif);
       setTimeLeft(isBreak ? 5 * 60 : 25 * 60);
     }
   }, [timeLeft]);
@@ -106,60 +185,72 @@ function App() {
   const switchMode = (breakMode: boolean) => {
     setIsBreak(breakMode);
     setIsRunning(false);
-    setBreakButtonImage(breakMode ? breakBtnClicked : breakBtn);
-    setStudyButtonImage(breakMode ? studyBtn : studyBtnClicked);
     setTimeLeft(breakMode ? 5 * 60: 25 * 60);
-    setGifImage(idleGif);
   }
 
   const handleClick = () => {
     if (!isRunning) {
       setIsRunning(true);
-      setGifImage(isBreak ? breakGif : studyGif);
-      setImage(resetImg);
     } else {
       //  timer is running
       setIsRunning(false);
       setTimeLeft(isBreak ? 5 * 60: 25 * 60);
-      setGifImage(idleGif);
-      setImage(playImg);
     }
   }
 
-  const containerClass = `home-container ${isRunning ? "background-green" : ""}`;
 
   return (
   
-    <div className={containerClass} style={{ position: "relative" }}>
+    <div
+      className="home-container"
+      style={{
+        backgroundImage: `url(${activeTheme.background})`,
+      }}
+    >
       <button className="close-button">
-        <img src={closeBtn} alt="Close" />
+        <img src={activeTheme.close} alt="Close" />
       </button>
 
-      <div className="home-content">
-        <div className="home-controls">
-          <button className="image-button" onClick={() => switchMode(false)}>
-            <img src={studyButtonImage} alt="Study" />
-          </button>
+      <h1 className="timer-asset">{formatTime(timeLeft)}</h1>
 
-          <button className="image-button" onClick={() => switchMode(true)}>
-            <img src={breakButtonImage} alt="Break" />
-          </button>
-        </div>
+      <h1
+        className="timer-asset"
+        style={{ color: activeTheme.timerColour }}
+      >
+        {formatTime(timeLeft)}
+      </h1>
 
-        <p className={`encouragement-text ${!isRunning ? "hidden" : ""}`}>
-          {encouragement}
-        </p>
+      <p 
+        className={`encouragement-asset ${!isRunning ? "hidden" : ""}`}
+        style={{ color: activeTheme.encouragementColour}}  
+      >
+        {encouragement}
+      </p>
 
-        <h1 className="home-timer">{formatTime(timeLeft)}</h1>
+      <button className="play-asset" onClick={handleClick}>
+        <img 
+          src={isRunning ? activeTheme.reset : activeTheme.play}
+          alt="Button Icon"
+        />
+      </button>
 
-        <img src={gifImage} alt="Timer Status" className="gif-image" />
-
-        <button className="home-button play-button" onClick={handleClick}>
-          <img src={image} alt="Button Icon" />
+      <div className="mode-buttons">
+        <button className="image-button" onClick={() => switchMode(false)}>
+          <img 
+            src={isBreak ? activeTheme.study : activeTheme.studyClicked}
+            alt="Study"
+          />
         </button>
 
+        <button className="image-button" onClick={() => switchMode(true)}>
+          <img 
+            src={isBreak ? activeTheme.breakClicked : activeTheme.break}
+            alt="Break"
+          />
+        </button>
       </div>
     </div>
+
   );
 }
 
