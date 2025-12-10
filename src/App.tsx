@@ -198,6 +198,14 @@ function App() {
     }
   }
 
+  // handle close click behaviour
+  const handleCloseClick = () => {
+    if (window.electronAPI?.closeApp) {
+      window.electronAPI.closeApp();
+    } else {
+      console.warn("Electron API not available");
+    }
+  }
 
   return (
   
@@ -208,7 +216,7 @@ function App() {
       }}
     >
       <button className="close-button">
-        <img src={activeTheme.close} alt="Close" />
+        <img src={activeTheme.close} onClick={ handleCloseClick } />
       </button>
 
       <h1 className="timer-asset">{formatTime(timeLeft)}</h1>
