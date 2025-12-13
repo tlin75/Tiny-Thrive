@@ -1,4 +1,4 @@
-# Tiny Thrive ☁️
+# ☁️ Tiny Thrive 
 
 >Tiny Thrive is a pixel-styled desktop focus timer built with **React** and **Electron**.  
 It’s designed to sit quietly on your desktop and help you stay focused during study sessions, with gentle encouragement, timed breaks, and rotating color themes to keep things feeling fresh.
@@ -27,7 +27,7 @@ Currently, I've been working on packaging the Electron app for desktop installat
 - IPC (Electron inter-process communication)
 
 
-## 🚀 Getting Started
+## 🖥️ Getting Started
 
 ### Install dependencies
 ```bash
@@ -48,18 +48,18 @@ npm run build
 npm run electron
 ```
 
-## How It Works 
+## 🧠 How It Works 
 - Timer logic is handled in React using hooks
 - Themes rotate automatically every 5 minutes during study mode
 - The Electron window is frameless, so window controls are recreated in the UI
 - Close and minimise buttons communicate with Electron using IPC via a secure preload script
 
-## Currently Working on 
+## 👩‍💻 Currently Working on 
 - Pause / Resume indicator
 - Theme selector
 - Session statistics
 
-## Simplified Project Structure 
+## 🗂️ Simplified Project Structure 
 ```bash
 /src
   ├─ App.tsx
