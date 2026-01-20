@@ -3,7 +3,10 @@
 >Tiny Thrive is a pixel-styled desktop focus timer built with **React** and **Electron**.  
 It’s designed to sit quietly on your desktop and help you stay focused during study sessions, with gentle encouragement, timed breaks, and rotating color themes to keep things feeling fresh.
 Currently, I've been working on packaging the Electron app for desktop installation.
----
+
+## 🎨 User Interface Preview
+<img src="src/assets/tiny-thrive-ui.png" alt="Tiny Thrive UI preview" width="300"/>
+UI design was created in Figma and reflect the current direction of the desktop app.
 
 ## ✨ Features
 
